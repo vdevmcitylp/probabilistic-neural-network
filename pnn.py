@@ -1,9 +1,9 @@
 import numpy as np
 import read_data, performance_metrics
 
-# np.random.seed(45)
-
+# Helper function that essentially combines the hidden layer and summation layer
 def rbf(centre, x, sigma):
+	
 	temp = -np.sum((centre - x) ** 2, axis = 1)
 	temp = temp / (2 * sigma * sigma)
 	temp = np.exp(temp)
@@ -14,38 +14,45 @@ def PNN(X_train, Y_train, X_test, Y_test, num_class):
 	num_testset = X_test.shape[0]
 	X_train_class = []
 
+	# Splits the training set into subsets where each subset contains data points from a particular class
 	for i in range(num_class):
 		index = np.where(Y_train == i)
-		# print(index)
 		X_train_class.append(X_train[index, :])
-		# print(X_train_class[i])		
 	
+	# Variable for storing the summation layer values from each class
 	g = np.zeros(num_class)
+	
+	# Variable for storing the predictions for each test data point
 	pred = np.zeros(num_testset)
 
 	for i in range(num_testset):
-		# if(i%1000 == 0):
-		# 	print(i),
+		# Checking whether everything is running smoothly :P
+		if(i%1000 == 0):
+			print(i),
+		
 		for j in range(num_class):
+			# Calculate summation layer
 			g[j] = np.sum(rbf(X_test[i].reshape(1, -1), X_train_class[j][0], 1.5)) / X_train_class[j][0].shape[0] 
-			# print(X_train_class[j][0].shape)
+		
+		# The index having the largest 'g' value is stored as the prediction
 		pred[i] = np.argmax(g)
-		# print(pred[i])
-
+		
 	return pred
 
-def output(x_in_out_train_split, y_in_out_train_split, x_test, y_test, num_PNN, num_class):
+# Write your own input function
+# X, Y = read_data.input()
 
-	result = []
-	for i in range(num_PNN):
-	 	result.append(PNN(x_in_out_train_split[i], y_in_out_train_split[i], x_test, y_test, num_class))
+# Write your own split function
+# X_train, Y_train, X_test, Y_test = split.split(X, Y)
 
-	vote = np.zeros(y_test.size)
-	for i in range(num_PNN):
-		vote = vote + result[i]
+# One Class Dataset
+num_class = 2
 
-	label = [int(v) for v in vote > num_PNN/2]
-	return label
-	# print(result)
-	# with open('result_HTRU', 'wb') as f:
-	# 	pickle.dump(result, f)
+#Call the PNN function for predictions
+predictions = PNN(X_train, Y_train, X_test, Y_test, num_class)
+
+#Performance Metrics
+print(performance_metrics.accuracy(Y_test, predictions))
+print(performance_metrics.confusion_matrix(Y_test, predictions, num_class))
+print(performance_metrics.precision(Y_test, predictions, num_class))
+print(performance_metrics.recall(Y_test, predictions, num_class))
