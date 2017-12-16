@@ -1,9 +1,11 @@
+# Wrote my own implementations of performance metrics just for fun
+# Feel free to use the scikit-learn functions
+
 import numpy as np
 
+# Valid only for two class cases
+
 def confusion_matrix(target, predicted, num_class):
-	
-	# target_nb = np.argmax(target, axis = 1)
-	# predicted_nb = np.argmax(predicted, axis = 1)
 
 	target_nb = target
 	predicted_nb = predicted
@@ -46,13 +48,3 @@ def recall(target, predicted, num_class):
 		r[i] = cm[i, i]/np.sum(cm[i, :])
 
 	return np.mean(r)
-
-# def loss(Y, output_layer, num_trainset):
-# 	return np.sum((Y - output_layer) ** 2) / num_trainset	
-
-# def sum_error(error, num_layers):
-# 	sum_square_error = np.zeros((num_layers, 1)) # 0 not to be used
-# 	for i in xrange(num_layers):
-# 		sum_square_error[i] = (np.sum(error[i]**2))**0.5
-
-# 	return sum_square_error
