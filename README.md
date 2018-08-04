@@ -14,6 +14,8 @@ A PNN has four layers:
 
 ![PNN Diagram](https://raw.githubusercontent.com/vdevmcitylp/probabilistic-neural-network/master/pnn.JPG "PNN Diagram")
 
+Reference: https://easyneuralnetwork.blogspot.com/2015/01/probabilistic-neural-network.html
+
 The code for this tutorial is available [here](https://github.com/vdevmcitylp/probabilistic-neural-network/blob/master/pnn.py).
 
 ### Input Layer
