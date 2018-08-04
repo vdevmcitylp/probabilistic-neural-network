@@ -25,15 +25,22 @@ So far so good.
 
 ### Pattern (Hidden) Layer
 
-The number of nodes in this layer is equal to the number of *training points* in your dataset. For instance, if your training set has 100,000 points, then we'll have 100,000 nodes in this layer.
+The number of nodes in this layer is equal to the number of *training points* in your dataset. For instance, if your training set has 100,000 points, then we'll have 100,000 nodes in this layer. Thus, each node represents a training point.
+
+The activation for each node in this layer is the value of Gaussian for the test point centred at that node.
+
+In the 2D case, G_0(x,y)\approx \exp(-((x-x_0)^2 + (y-y_0)^2)/2\sigma^2).
+
+(x, y): Test Point
+(x_0, y_0): Node
 
 ### Summation Layer
 
 The number of nodes in this layer is equal to the number of *classes*. So for two-class classfication, we'll have two nodes.
 
-To compute the activation for a particular node (class) in this layer, we apply this formula.
+The activation for each node (class) in this layer is the sum of the activations for the nodes in the previous layer for which the node belongs to the particular class. Notice in the diagram how the hidden layer is not fully connected with the summation layer.
 
-Lines 5-10 implement this formula,
+Lines 5-10 combine both the hidden and summation layer,
 
     def rbf(centre, x, sigma):
     
