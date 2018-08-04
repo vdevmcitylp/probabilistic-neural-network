@@ -29,10 +29,11 @@ The number of nodes in this layer is equal to the number of *training points* in
 
 The activation for each node in this layer is the value of Gaussian for the test point centred at that node.
 
-In the 2D case, G_0(x,y)\approx \exp(-((x-x_0)^2 + (y-y_0)^2)/2\sigma^2).
+In the 2D case, 
+
+![equation](https://raw.githubusercontent.com/vdevmcitylp/probabilistic-neural-network/master/CodeCogsEqn.gif)
 
 (x, y): Test Point
-(x_0, y_0): Node
 
 ### Summation Layer
 
