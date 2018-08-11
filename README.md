@@ -16,8 +16,6 @@ A PNN has four layers:
 
 Reference: https://easyneuralnetwork.blogspot.com/2015/01/probabilistic-neural-network.html
 
-The code for this tutorial is available [here](https://github.com/vdevmcitylp/probabilistic-neural-network/blob/master/pnn.py).
-
 ### Input Layer
 
 The input layer is the feature vector representation of the input. Normalize the data before feeding it to the network.
