@@ -1,58 +1,77 @@
 import numpy as np
-import read_data, performance_metrics
+import read_data
 
-# Helper function that essentially combines the hidden layer and summation layer
+from sklearn.metrics import accuracy_score, \
+							confusion_matrix, \
+							precision_score, \
+							recall_score
+
+
+# Helper function that combines the pattern layer and summation layer
 def rbf(centre, x, sigma):
 	
+	centre = centre.reshape(1, -1)
+
 	temp = -np.sum((centre - x) ** 2, axis = 1)
 	temp = temp / (2 * sigma * sigma)
 	temp = np.exp(temp)
-	return np.sum(temp)
-
-def PNN(X_train, Y_train, X_test, Y_test, num_class):
-
-	num_testset = X_test.shape[0]
-	X_train_class = []
-
-	# Splits the training set into subsets where each subset contains data points from a particular class
-	for i in range(num_class):
-		index = np.where(Y_train == i)
-		X_train_class.append(X_train[index, :])
+	gaussian = np.sum(temp)
 	
+	return gaussian
+
+
+def subset_by_class(data, labels):
+
+	x_train_subsets = []
+	
+	for l in labels:
+		indices = np.where(data['y_train'] == l)
+		x_train_subsets.append(data['x_train'][indices, :])
+
+	return x_train_subsets
+
+
+def PNN(data):
+
+	num_testset = data['x_test'].shape[0]
+	labels = np.unique(data['y_train'])
+	num_class = len(labels)
+
+	sigma = 10
+
+	# Splits the training set into subsets where each subset contains data points from a particular class	
+	x_train_subsets = subset_by_class(data, labels)	
+
 	# Variable for storing the summation layer values from each class
-	g = np.zeros(num_class)
+	summation_layer = np.zeros(num_class)
 	
 	# Variable for storing the predictions for each test data point
-	pred = np.zeros(num_testset)
+	predictions = np.zeros(num_testset)
 
-	for i in range(num_testset):
-		# Checking whether everything is running smoothly :P
-		if(i%1000 == 0):
-			print(i),
-		
-		for j in range(num_class):
+	for i, test_point in enumerate(data['y_test']):
+
+		for j, subset in enumerate(x_train_subsets):
 			# Calculate summation layer
-			g[j] = np.sum(rbf(X_test[i].reshape(1, -1), X_train_class[j][0], 1.5)) / X_train_class[j][0].shape[0] 
+			summation_layer[j] = np.sum(
+				rbf(test_point, subset[0], sigma)) / subset[0].shape[0] 
 		
-		# The index having the largest 'g' value is stored as the prediction
-		pred[i] = np.argmax(g)
-		
-	return pred
+		# The index having the largest value in the summation_layer is stored as the prediction
+		predictions[i] = np.argmax(summation_layer)
+	
+	return predictions
 
-# Write your own input function
-# X, Y = read_data.input()
 
-# Write your own split function
-# X_train, Y_train, X_test, Y_test = split.split(X, Y)
+def print_metrics(y_test, predictions):
 
-# One Class Dataset
-num_class = 2
+	print('Confusion Matrix')
+	print(confusion_matrix(y_test, predictions))
+	print('Accuracy: {}'.format(accuracy_score(y_test, predictions)))
+	print('Precision: {}'.format(precision_score(y_test, predictions, average = 'micro')))
+	print('Recall: {}'.format(recall_score(y_test, predictions, average = 'micro')))
+	
 
-#Call the PNN function for predictions
-predictions = PNN(X_train, Y_train, X_test, Y_test, num_class)
-
-#Performance Metrics
-print(performance_metrics.accuracy(Y_test, predictions))
-print(performance_metrics.confusion_matrix(Y_test, predictions, num_class))
-print(performance_metrics.precision(Y_test, predictions, num_class))
-print(performance_metrics.recall(Y_test, predictions, num_class))
+if __name__ == '__main__':
+	
+	data = read_data.input()
+	predictions = PNN(data)
+	print_metrics(data['y_test'], predictions)
