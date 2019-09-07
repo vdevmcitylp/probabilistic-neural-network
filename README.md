@@ -12,7 +12,7 @@ A PNN has four layers:
 3. Summation Layer
 4. Output Layer
 
-![PNN Diagram](https://raw.githubusercontent.com/vdevmcitylp/probabilistic-neural-network/master/pnn.JPG "PNN Diagram")
+![PNN Diagram](https://raw.githubusercontent.com/vdevmcitylp/probabilistic-neural-network/master/Photos/pnn.JPG "PNN Diagram")
 
 Reference: https://easyneuralnetwork.blogspot.com/2015/01/probabilistic-neural-network.html
 
@@ -29,7 +29,7 @@ The activation for each node in this layer is the value of Gaussian for the test
 
 In the 2D case, 
 
-![equation](https://raw.githubusercontent.com/vdevmcitylp/probabilistic-neural-network/master/CodeCogsEqn.gif)
+![equation](https://raw.githubusercontent.com/vdevmcitylp/probabilistic-neural-network/master/Photos/CodeCogsEqn.gif)
 
 (x, y): Test Point
 
