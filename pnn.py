@@ -48,8 +48,8 @@ def PNN(data):
 	# Variable for storing the predictions for each test data point
 	predictions = np.zeros(num_testset)
 
-	for i, test_point in enumerate(data['y_test']):
-
+	for i, test_point in enumerate(data['x_test']):
+		
 		for j, subset in enumerate(x_train_subsets):
 			# Calculate summation layer
 			summation_layer[j] = np.sum(
